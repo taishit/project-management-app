@@ -1,27 +1,27 @@
 # ProjectFlow
 
-ProjectFlow は、公開 GitHub リポジトリで管理しやすい構成を前提にした架空のプロジェクト管理 Web アプリです。課題管理、進捗可視化、プロジェクト一覧、ダッシュボード確認などを行うための初期モノレポとして作成しています。
+ProjectFlow は、Backlog や Jira のようなプロジェクト管理ツールを参考にした学習用Webアプリケーションです。実案件に近い開発プロセス（要件定義、設計、実装、レビュー、リリース）を体験できるよう設計されています。
 
-Backlog 風の使いやすさを参考にしつつ、名称・画面構成・文言・配色は独自化し、特定サービスのコピーにならないように設計しています。
+名称・画面構成・文言・配色は独自化し、特定サービスのコピーにならないように設計しています。
 
 ## プロジェクト概要
 
 - フロントエンドとバックエンドを分離したモノレポ構成
 - フロントエンドは Vue 3 + Vite + TypeScript
-- バックエンドは Java 21 + Spring Boot + Maven
-- DB はローカルの PostgreSQL を利用する想定
+- バックエンドは Java 17 + Spring Boot + Maven
+- DB はローカル PostgreSQL を利用する想定
 - 初期段階ではインメモリ実装を中心に、公開リポジトリで扱いやすいサンプルデータを同梱
 
 ## 技術構成
 
 - Frontend: Vue 3, Vite, TypeScript, Vue Router
-- Backend: Java 21, Spring Boot 3, Maven
+- Backend: Java 17, Spring Boot 3, Maven
 - Database: PostgreSQL 16
 
 ## ディレクトリ構成
 
 ```text
-project-flow/
+project-management-app/
 ├─ README.md
 ├─ docs/
 ├─ frontend/
@@ -50,9 +50,9 @@ npm.cmd run dev
 
 事前にローカルの PostgreSQL を起動し、以下の接続先を用意してください。
 
-- Database: `projectflow`
-- Username: `projectflow`
-- Password: `projectflow`
+- Database: `project_management_app`
+- Username: `project_management_app`
+- Password: `project_management_app`
 
 起動コマンド:
 
@@ -72,13 +72,13 @@ cd backend
 
 ## ローカルDB設定
 
-Spring Boot の DB 接続設定は [application.yml](/abs/path/C:/Users/81802/Desktop/App/project-flow/backend/src/main/resources/application.yml) に定義しています。
+Spring Boot の DB 接続設定は [application.yml](/abs/path/C:/Users/81802/Desktop/App/project-management-app/backend/src/main/resources/application.yml) に定義しています。
 
 - Host: `localhost`
 - Port: `5432`
-- Database: `projectflow`
-- Username: `projectflow`
-- Password: `projectflow`
+- Database: `project_management_app`
+- Username: `project_management_app`
+- Password: `project_management_app`
 
 必要に応じてローカル環境に合わせて変更してください。
 

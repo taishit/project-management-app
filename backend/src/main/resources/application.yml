@@ -1,16 +1,16 @@
 spring:
   application:
-    name: projectflow-backend
+    name: project-management-app
   datasource:
-    url: jdbc:postgresql://localhost:5432/projectflow
-    username: projectflow
-    password: projectflow
+    url: jdbc:postgresql://localhost:5432/project_management_app
+    username: project_management_app
+    password: project_management_app
     driver-class-name: org.postgresql.Driver
 
 server:
   port: 8080
 
-projectflow:
+projectmanagementapp:
   cors:
     allowed-origins:
       - http://localhost:5173

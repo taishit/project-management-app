@@ -11,10 +11,10 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.projectflow</groupId>
-    <artifactId>backend</artifactId>
+    <groupId>com.projectmanagementapp</groupId>
+    <artifactId>project-management-app</artifactId>
     <version>0.1.0</version>
-    <name>projectflow-backend</name>
+    <name>project-management-app</name>
     <description>ProjectFlow backend application</description>
 
     <properties>
