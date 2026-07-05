@@ -1,13 +1,13 @@
 package com.projectmanagementapp.controller;
 
-import com.projectmanagementapp.dto.DashboardSummaryResponse;
 import com.projectmanagementapp.domain.service.DashboardService;
+import com.projectmanagementapp.dto.DashboardResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/dashboard")
+@RequestMapping("/api/dashboard")
 public class DashboardController {
 
     private final DashboardService dashboardService;
@@ -17,8 +17,7 @@ public class DashboardController {
     }
 
     @GetMapping
-    public DashboardSummaryResponse getSummary() {
-        return dashboardService.getSummary();
+    public DashboardResponse getDashboard() {
+        return dashboardService.getDashboard();
     }
 }
-

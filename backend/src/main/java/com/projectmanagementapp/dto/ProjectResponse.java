@@ -1,13 +1,13 @@
 package com.projectmanagementapp.dto;
 
-import lombok.Value;
+import java.time.LocalDateTime;
 
-@Value
-public class ProjectResponse {
-    Long id;
-    String code;
-    String name;
-    String status;
-    String owner;
-    String description;
+public record ProjectResponse(
+    Long id,
+    String projectKey,
+    String name,
+    String description,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {
 }

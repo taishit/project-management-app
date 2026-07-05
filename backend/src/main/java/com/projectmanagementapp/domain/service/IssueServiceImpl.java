@@ -1,80 +1,99 @@
 package com.projectmanagementapp.domain.service;
 
 import com.projectmanagementapp.domain.dao.IssueDao;
+import com.projectmanagementapp.domain.dao.ProjectDao;
 import com.projectmanagementapp.domain.model.Issue;
-import com.projectmanagementapp.dto.IssueDetailResponse;
+import com.projectmanagementapp.domain.model.IssueStatus;
 import com.projectmanagementapp.dto.IssueRequest;
-import com.projectmanagementapp.dto.IssueSummaryResponse;
+import com.projectmanagementapp.dto.IssueResponse;
+import com.projectmanagementapp.exception.ResourceNotFoundException;
 import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class IssueServiceImpl implements IssueService {
 
     private final IssueDao issueDao;
+    private final ProjectDao projectDao;
 
-    public IssueServiceImpl(IssueDao issueDao) {
+    public IssueServiceImpl(IssueDao issueDao, ProjectDao projectDao) {
         this.issueDao = issueDao;
+        this.projectDao = projectDao;
     }
 
     @Override
-    public List<IssueSummaryResponse> findAll() {
-        return issueDao.findAll().stream()
-            .map(issue -> new IssueSummaryResponse(
-                issue.getId(),
-                issue.getIssueKey(),
-                issue.getProjectName(),
-                issue.getTitle(),
-                issue.getStatus(),
-                issue.getPriority(),
-                issue.getAssignee()
-            ))
-            .toList();
+    public List<IssueResponse> findAll(Long projectId, IssueStatus status) {
+        List<Issue> issues;
+        if (projectId != null && status != null) {
+            issues = issueDao.findByProjectIdAndStatus(projectId, status);
+        } else if (projectId != null) {
+            issues = issueDao.findByProjectId(projectId);
+        } else if (status != null) {
+            issues = issueDao.findByStatus(status);
+        } else {
+            issues = issueDao.findAll();
+        }
+        return issues.stream().map(this::toResponse).toList();
     }
 
     @Override
-    public IssueDetailResponse findById(Long id) {
+    public IssueResponse findById(Long id) {
+        return toResponse(findIssue(id));
+    }
+
+    @Override
+    @Transactional
+    public IssueResponse create(IssueRequest request) {
+        ensureProjectExists(request.projectId());
+        return toResponse(issueDao.insert(request));
+    }
+
+    @Override
+    @Transactional
+    public IssueResponse update(Long id, IssueRequest request) {
+        findIssue(id);
+        ensureProjectExists(request.projectId());
+        return toResponse(issueDao.update(id, request));
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        findIssue(id);
+        issueDao.delete(id);
+    }
+
+    private void ensureProjectExists(Long projectId) {
+        if (projectDao.findById(projectId) == null) {
+            throw new ResourceNotFoundException("プロジェクトが見つかりません。");
+        }
+    }
+
+    private Issue findIssue(Long id) {
         Issue issue = issueDao.findById(id);
         if (issue == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Issue not found");
+            throw new ResourceNotFoundException("課題が見つかりません。");
         }
-        return toDetailResponse(issue);
+        return issue;
     }
 
-    @Override
-    public IssueDetailResponse create(IssueRequest request) {
-        return toDetailResponse(issueDao.create(request));
-    }
-
-    @Override
-    public IssueDetailResponse update(Long id, IssueRequest request) {
-        Issue issue = issueDao.update(id, request);
-        if (issue == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Issue not found");
-        }
-        return toDetailResponse(issue);
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (issueDao.deleteById(id) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Issue not found");
-        }
-    }
-
-    private IssueDetailResponse toDetailResponse(Issue issue) {
-        return new IssueDetailResponse(
+    public IssueResponse toResponse(Issue issue) {
+        return new IssueResponse(
             issue.getId(),
-            issue.getIssueKey(),
+            issue.getProjectId(),
+            issue.getProjectKey(),
             issue.getProjectName(),
             issue.getTitle(),
-            issue.getStatus(),
-            issue.getPriority(),
-            issue.getAssignee(),
+            issue.getDescription(),
+            issue.getStatus().name(),
+            issue.getStatus().getLabel(),
+            issue.getPriority().name(),
+            issue.getPriority().getLabel(),
+            issue.getAssigneeName(),
             issue.getDueDate(),
-            issue.getDescription()
+            issue.getCreatedAt(),
+            issue.getUpdatedAt()
         );
     }
 }

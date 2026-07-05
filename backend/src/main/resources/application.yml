@@ -2,13 +2,15 @@ spring:
   application:
     name: project-management-app
   datasource:
-    url: jdbc:postgresql://localhost:5432/project_management_app
-    username: project_management_app
-    password: project_management_app
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres?currentSchema=management_app}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   sql:
     init:
       mode: always
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
 
 server:
   port: 8080

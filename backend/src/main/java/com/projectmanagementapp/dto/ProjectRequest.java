@@ -1,38 +1,20 @@
 package com.projectmanagementapp.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Value;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-@Value
-public class ProjectRequest {
+public record ProjectRequest(
     @NotBlank
-    String code;
-
-    @NotBlank
-    String name;
-
-    @NotBlank
-    String status;
+    @Size(max = 20)
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
+    String projectKey,
 
     @NotBlank
-    String owner;
+    @Size(max = 100)
+    String name,
 
-    String description;
-
-    @JsonCreator
-    public ProjectRequest(
-        @JsonProperty("code") String code,
-        @JsonProperty("name") String name,
-        @JsonProperty("status") String status,
-        @JsonProperty("owner") String owner,
-        @JsonProperty("description") String description
-    ) {
-        this.code = code;
-        this.name = name;
-        this.status = status;
-        this.owner = owner;
-        this.description = description;
-    }
+    @Size(max = 2000)
+    String description
+) {
 }

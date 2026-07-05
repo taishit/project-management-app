@@ -1,52 +1,32 @@
 package com.projectmanagementapp.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.projectmanagementapp.domain.model.IssuePriority;
+import com.projectmanagementapp.domain.model.IssueStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Value;
+import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 
-@Value
-public class IssueRequest {
+public record IssueRequest(
+    @NotNull
+    Long projectId,
+
     @NotBlank
-    String issueKey;
+    @Size(max = 200)
+    String title,
+
+    @Size(max = 5000)
+    String description,
 
     @NotNull
-    Long projectId;
+    IssueStatus status,
 
-    @NotBlank
-    String title;
+    @NotNull
+    IssuePriority priority,
 
-    @NotBlank
-    String status;
+    @Size(max = 100)
+    String assigneeName,
 
-    @NotBlank
-    String priority;
-
-    @NotBlank
-    String assignee;
-
-    String dueDate;
-    String description;
-
-    @JsonCreator
-    public IssueRequest(
-        @JsonProperty("issueKey") String issueKey,
-        @JsonProperty("projectId") Long projectId,
-        @JsonProperty("title") String title,
-        @JsonProperty("status") String status,
-        @JsonProperty("priority") String priority,
-        @JsonProperty("assignee") String assignee,
-        @JsonProperty("dueDate") String dueDate,
-        @JsonProperty("description") String description
-    ) {
-        this.issueKey = issueKey;
-        this.projectId = projectId;
-        this.title = title;
-        this.status = status;
-        this.priority = priority;
-        this.assignee = assignee;
-        this.dueDate = dueDate;
-        this.description = description;
-    }
+    LocalDate dueDate
+) {
 }

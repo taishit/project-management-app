@@ -26,8 +26,23 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public Project create(ProjectRequest request) {
-        return projectMapper.create(request);
+    public Project findByProjectKey(String projectKey) {
+        return projectMapper.findByProjectKey(projectKey);
+    }
+
+    @Override
+    public boolean existsByProjectKey(String projectKey) {
+        return projectMapper.existsByProjectKey(projectKey);
+    }
+
+    @Override
+    public boolean existsByProjectKeyAndIdNot(String projectKey, Long id) {
+        return projectMapper.existsByProjectKeyAndIdNot(projectKey, id);
+    }
+
+    @Override
+    public Project insert(ProjectRequest request) {
+        return projectMapper.insert(request);
     }
 
     @Override
@@ -36,7 +51,17 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public int deleteById(Long id) {
-        return projectMapper.deleteById(id);
+    public int delete(Long id) {
+        return projectMapper.delete(id);
+    }
+
+    @Override
+    public long countAll() {
+        return projectMapper.countAll();
+    }
+
+    @Override
+    public long countIssuesByProjectId(Long projectId) {
+        return projectMapper.countIssuesByProjectId(projectId);
     }
 }

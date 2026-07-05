@@ -4,10 +4,11 @@ import com.projectmanagementapp.domain.dao.ProjectDao;
 import com.projectmanagementapp.domain.model.Project;
 import com.projectmanagementapp.dto.ProjectRequest;
 import com.projectmanagementapp.dto.ProjectResponse;
+import com.projectmanagementapp.exception.BusinessException;
+import com.projectmanagementapp.exception.ResourceNotFoundException;
 import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -20,49 +21,59 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectResponse> findAll() {
-        return projectDao.findAll().stream()
-            .map(this::toResponse)
-            .toList();
+        return projectDao.findAll().stream().map(this::toResponse).toList();
     }
 
     @Override
     public ProjectResponse findById(Long id) {
+        return toResponse(findProject(id));
+    }
+
+    @Override
+    @Transactional
+    public ProjectResponse create(ProjectRequest request) {
+        if (projectDao.existsByProjectKey(request.projectKey())) {
+            throw new BusinessException("プロジェクトキーは既に使用されています。");
+        }
+        return toResponse(projectDao.insert(request));
+    }
+
+    @Override
+    @Transactional
+    public ProjectResponse update(Long id, ProjectRequest request) {
+        findProject(id);
+        if (projectDao.existsByProjectKeyAndIdNot(request.projectKey(), id)) {
+            throw new BusinessException("プロジェクトキーは既に使用されています。");
+        }
+        return toResponse(projectDao.update(id, request));
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        findProject(id);
+        if (projectDao.countIssuesByProjectId(id) > 0) {
+            throw new BusinessException("課題が存在するプロジェクトは削除できません。");
+        }
+        projectDao.delete(id);
+    }
+
+    private Project findProject(Long id) {
         Project project = projectDao.findById(id);
         if (project == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+            throw new ResourceNotFoundException("プロジェクトが見つかりません。");
         }
-        return toResponse(project);
-    }
-
-    @Override
-    public ProjectResponse create(ProjectRequest request) {
-        return toResponse(projectDao.create(request));
-    }
-
-    @Override
-    public ProjectResponse update(Long id, ProjectRequest request) {
-        Project project = projectDao.update(id, request);
-        if (project == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
-        }
-        return toResponse(project);
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (projectDao.deleteById(id) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
-        }
+        return project;
     }
 
     private ProjectResponse toResponse(Project project) {
         return new ProjectResponse(
             project.getId(),
-            project.getCode(),
+            project.getProjectKey(),
             project.getName(),
-            project.getStatus(),
-            project.getOwner(),
-            project.getDescription()
+            project.getDescription(),
+            project.getCreatedAt(),
+            project.getUpdatedAt()
         );
     }
 }

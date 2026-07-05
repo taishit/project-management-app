@@ -1,19 +1,14 @@
 package com.projectmanagementapp.domain.service;
 
-import com.projectmanagementapp.dto.IssueDetailResponse;
+import com.projectmanagementapp.domain.model.IssueStatus;
 import com.projectmanagementapp.dto.IssueRequest;
-import com.projectmanagementapp.dto.IssueSummaryResponse;
+import com.projectmanagementapp.dto.IssueResponse;
 import java.util.List;
 
 public interface IssueService {
-
-    List<IssueSummaryResponse> findAll();
-
-    IssueDetailResponse findById(Long id);
-
-    IssueDetailResponse create(IssueRequest request);
-
-    IssueDetailResponse update(Long id, IssueRequest request);
-
+    List<IssueResponse> findAll(Long projectId, IssueStatus status);
+    IssueResponse findById(Long id);
+    IssueResponse create(IssueRequest request);
+    IssueResponse update(Long id, IssueRequest request);
     void delete(Long id);
 }

@@ -7,100 +7,147 @@
   <resultMap id="issueResultMap" type="com.projectmanagementapp.domain.model.Issue">
     <constructor>
       <idArg column="id" javaType="java.lang.Long"/>
-      <arg column="issue_key" javaType="java.lang.String"/>
       <arg column="project_id" javaType="java.lang.Long"/>
+      <arg column="project_key" javaType="java.lang.String"/>
       <arg column="project_name" javaType="java.lang.String"/>
       <arg column="title" javaType="java.lang.String"/>
-      <arg column="status" javaType="java.lang.String"/>
-      <arg column="priority" javaType="java.lang.String"/>
-      <arg column="assignee" javaType="java.lang.String"/>
-      <arg column="due_date" javaType="java.lang.String"/>
       <arg column="description" javaType="java.lang.String"/>
+      <arg column="status" javaType="com.projectmanagementapp.domain.model.IssueStatus"/>
+      <arg column="priority" javaType="com.projectmanagementapp.domain.model.IssuePriority"/>
+      <arg column="assignee_name" javaType="java.lang.String"/>
+      <arg column="due_date" javaType="java.time.LocalDate"/>
+      <arg column="created_at" javaType="java.time.LocalDateTime"/>
+      <arg column="updated_at" javaType="java.time.LocalDateTime"/>
     </constructor>
   </resultMap>
 
+  <sql id="issueColumns">
+    i.id,
+    i.project_id,
+    p.project_key,
+    p.name AS project_name,
+    i.title,
+    i.description,
+    i.status,
+    i.priority,
+    i.assignee_name,
+    i.due_date,
+    i.created_at,
+    i.updated_at
+  </sql>
+
   <select id="findAll" resultMap="issueResultMap">
-    SELECT i.id,
-           i.issue_key,
-           i.project_id,
-           p.name AS project_name,
-           i.title,
-           i.status,
-           i.priority,
-           i.assignee,
-           i.due_date,
-           i.description
-    FROM issues i
-    JOIN projects p ON p.id = i.project_id
-    ORDER BY i.id
+    SELECT <include refid="issueColumns"/>
+    FROM management_app.issues i
+    JOIN management_app.projects p ON p.id = i.project_id
+    ORDER BY i.updated_at DESC, i.id DESC
   </select>
 
   <select id="findById" parameterType="long" resultMap="issueResultMap">
-    SELECT i.id,
-           i.issue_key,
-           i.project_id,
-           p.name AS project_name,
-           i.title,
-           i.status,
-           i.priority,
-           i.assignee,
-           i.due_date,
-           i.description
-    FROM issues i
-    JOIN projects p ON p.id = i.project_id
+    SELECT <include refid="issueColumns"/>
+    FROM management_app.issues i
+    JOIN management_app.projects p ON p.id = i.project_id
     WHERE i.id = #{id}
   </select>
 
-  <select id="create" parameterType="com.projectmanagementapp.dto.IssueRequest" resultMap="issueResultMap">
+  <select id="findByProjectId" parameterType="long" resultMap="issueResultMap">
+    SELECT <include refid="issueColumns"/>
+    FROM management_app.issues i
+    JOIN management_app.projects p ON p.id = i.project_id
+    WHERE i.project_id = #{projectId}
+    ORDER BY i.updated_at DESC, i.id DESC
+  </select>
+
+  <select id="findByStatus" parameterType="com.projectmanagementapp.domain.model.IssueStatus" resultMap="issueResultMap">
+    SELECT <include refid="issueColumns"/>
+    FROM management_app.issues i
+    JOIN management_app.projects p ON p.id = i.project_id
+    WHERE i.status = #{status}
+    ORDER BY i.updated_at DESC, i.id DESC
+  </select>
+
+  <select id="findByProjectIdAndStatus" resultMap="issueResultMap">
+    SELECT <include refid="issueColumns"/>
+    FROM management_app.issues i
+    JOIN management_app.projects p ON p.id = i.project_id
+    WHERE i.project_id = #{projectId}
+      AND i.status = #{status}
+    ORDER BY i.updated_at DESC, i.id DESC
+  </select>
+
+  <select id="findRecent" parameterType="int" resultMap="issueResultMap">
+    SELECT <include refid="issueColumns"/>
+    FROM management_app.issues i
+    JOIN management_app.projects p ON p.id = i.project_id
+    ORDER BY i.updated_at DESC, i.id DESC
+    LIMIT #{limit}
+  </select>
+
+  <select id="insert" parameterType="com.projectmanagementapp.dto.IssueRequest" resultMap="issueResultMap">
     WITH inserted AS (
-      INSERT INTO issues (issue_key, project_id, title, status, priority, assignee, due_date, description)
-      VALUES (#{issueKey}, #{projectId}, #{title}, #{status}, #{priority}, #{assignee}, #{dueDate}, #{description})
-      RETURNING id, issue_key, project_id, title, status, priority, assignee, due_date, description
+      INSERT INTO management_app.issues (project_id, title, description, status, priority, assignee_name, due_date, created_at, updated_at)
+      VALUES (#{projectId}, #{title}, #{description}, #{status}, #{priority}, #{assigneeName}, #{dueDate}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      RETURNING id, project_id, title, description, status, priority, assignee_name, due_date, created_at, updated_at
     )
     SELECT i.id,
-           i.issue_key,
            i.project_id,
+           p.project_key,
            p.name AS project_name,
            i.title,
+           i.description,
            i.status,
            i.priority,
-           i.assignee,
+           i.assignee_name,
            i.due_date,
-           i.description
+           i.created_at,
+           i.updated_at
     FROM inserted i
-    JOIN projects p ON p.id = i.project_id
+    JOIN management_app.projects p ON p.id = i.project_id
   </select>
 
   <select id="update" resultMap="issueResultMap">
     WITH updated AS (
-      UPDATE issues
-      SET issue_key = #{request.issueKey},
-          project_id = #{request.projectId},
+      UPDATE management_app.issues
+      SET project_id = #{request.projectId},
           title = #{request.title},
+          description = #{request.description},
           status = #{request.status},
           priority = #{request.priority},
-          assignee = #{request.assignee},
+          assignee_name = #{request.assigneeName},
           due_date = #{request.dueDate},
-          description = #{request.description}
+          updated_at = CURRENT_TIMESTAMP
       WHERE id = #{id}
-      RETURNING id, issue_key, project_id, title, status, priority, assignee, due_date, description
+      RETURNING id, project_id, title, description, status, priority, assignee_name, due_date, created_at, updated_at
     )
     SELECT i.id,
-           i.issue_key,
            i.project_id,
+           p.project_key,
            p.name AS project_name,
            i.title,
+           i.description,
            i.status,
            i.priority,
-           i.assignee,
+           i.assignee_name,
            i.due_date,
-           i.description
+           i.created_at,
+           i.updated_at
     FROM updated i
-    JOIN projects p ON p.id = i.project_id
+    JOIN management_app.projects p ON p.id = i.project_id
   </select>
 
-  <delete id="deleteById" parameterType="long">
-    DELETE FROM issues
+  <delete id="delete" parameterType="long">
+    DELETE FROM management_app.issues
     WHERE id = #{id}
   </delete>
+
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*)
+    FROM management_app.issues
+  </select>
+
+  <select id="countByStatus" parameterType="com.projectmanagementapp.domain.model.IssueStatus" resultType="long">
+    SELECT COUNT(*)
+    FROM management_app.issues
+    WHERE status = #{status}
+  </select>
 </mapper>

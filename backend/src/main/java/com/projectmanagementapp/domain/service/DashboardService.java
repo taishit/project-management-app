@@ -1,8 +1,7 @@
 package com.projectmanagementapp.domain.service;
 
-import com.projectmanagementapp.dto.DashboardSummaryResponse;
+import com.projectmanagementapp.dto.DashboardResponse;
 
 public interface DashboardService {
-
-    DashboardSummaryResponse getSummary();
+    DashboardResponse getDashboard();
 }

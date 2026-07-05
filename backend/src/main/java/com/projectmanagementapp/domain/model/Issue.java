@@ -1,17 +1,21 @@
 package com.projectmanagementapp.domain.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Value;
 
 @Value
 public class Issue {
     Long id;
-    String issueKey;
     Long projectId;
+    String projectKey;
     String projectName;
     String title;
-    String status;
-    String priority;
-    String assignee;
-    String dueDate;
     String description;
+    IssueStatus status;
+    IssuePriority priority;
+    String assigneeName;
+    LocalDate dueDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

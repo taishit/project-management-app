@@ -8,14 +8,14 @@ ProjectFlow は、Backlog や Jira のようなプロジェクト管理ツール
 
 - フロントエンドとバックエンドを分離したモノレポ構成
 - フロントエンドは Vue 3 + Vite + TypeScript
-- バックエンドは Java 17 + Spring Boot + Maven
+- バックエンドは Java 21 + Spring Boot + Maven
 - DB はローカル PostgreSQL を利用する想定
 - 初期段階ではインメモリ実装を中心に、公開リポジトリで扱いやすいサンプルデータを同梱
 
 ## 技術構成
 
 - Frontend: Vue 3, Vite, TypeScript, Vue Router
-- Backend: Java 17, Spring Boot 3, Maven
+- Backend: Java 21, Spring Boot 3, Maven
 - Database: PostgreSQL 16
 
 ## ディレクトリ構成
@@ -86,7 +86,7 @@ Spring Boot の DB 接続設定は [application.yml](/abs/path/C:/Users/81802/De
 
 - 実在企業名、社内情報、機密情報を含めない
 - API 仕様変更時は `docs/04_API一覧.md` を更新する
-- DB 設計変更時は `docs/05_DB設計.md` と `docs/06_ER図.md` を更新する
+- DB 設計変更時は `docs/05_DB設計.md` を更新する
 - 画面追加時は `docs/03_画面一覧.md` を更新する
-- 命名、ブランチ運用、コーディング規約は `docs/07_コーディング規約.md` を参照する
-- レビュー観点は `docs/10_レビュー観点.md` を参照する
+- 命名、ブランチ運用、コーディング規約は `docs/06_コーディング規約.md` を参照する
+- レビュー観点は `docs/08_レビュー観点.md` を参照する

@@ -2,16 +2,13 @@ package com.projectmanagementapp.controller;
 
 import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
 public class HealthController {
 
-    @GetMapping("/health")
+    @GetMapping("/api/health")
     public Map<String, String> health() {
-        return Map.of("status", "UP", "application", "ProjectFlow");
+        return Map.of("status", "UP");
     }
 }
-

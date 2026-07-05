@@ -7,45 +7,78 @@
   <resultMap id="projectResultMap" type="com.projectmanagementapp.domain.model.Project">
     <constructor>
       <idArg column="id" javaType="java.lang.Long"/>
-      <arg column="code" javaType="java.lang.String"/>
+      <arg column="project_key" javaType="java.lang.String"/>
       <arg column="name" javaType="java.lang.String"/>
-      <arg column="status" javaType="java.lang.String"/>
-      <arg column="owner" javaType="java.lang.String"/>
       <arg column="description" javaType="java.lang.String"/>
+      <arg column="created_at" javaType="java.time.LocalDateTime"/>
+      <arg column="updated_at" javaType="java.time.LocalDateTime"/>
     </constructor>
   </resultMap>
 
   <select id="findAll" resultMap="projectResultMap">
-    SELECT id, code, name, status, owner, description
-    FROM projects
+    SELECT id, project_key, name, description, created_at, updated_at
+    FROM management_app.projects
     ORDER BY id
   </select>
 
   <select id="findById" parameterType="long" resultMap="projectResultMap">
-    SELECT id, code, name, status, owner, description
-    FROM projects
+    SELECT id, project_key, name, description, created_at, updated_at
+    FROM management_app.projects
     WHERE id = #{id}
   </select>
 
-  <select id="create" parameterType="com.projectmanagementapp.dto.ProjectRequest" resultMap="projectResultMap">
-    INSERT INTO projects (code, name, status, owner, description)
-    VALUES (#{code}, #{name}, #{status}, #{owner}, #{description})
-    RETURNING id, code, name, status, owner, description
+  <select id="findByProjectKey" parameterType="string" resultMap="projectResultMap">
+    SELECT id, project_key, name, description, created_at, updated_at
+    FROM management_app.projects
+    WHERE project_key = #{projectKey}
+  </select>
+
+  <select id="existsByProjectKey" parameterType="string" resultType="boolean">
+    SELECT EXISTS (
+      SELECT 1
+      FROM management_app.projects
+      WHERE project_key = #{projectKey}
+    )
+  </select>
+
+  <select id="existsByProjectKeyAndIdNot" resultType="boolean">
+    SELECT EXISTS (
+      SELECT 1
+      FROM management_app.projects
+      WHERE project_key = #{projectKey}
+        AND id != #{id}
+    )
+  </select>
+
+  <select id="insert" parameterType="com.projectmanagementapp.dto.ProjectRequest" resultMap="projectResultMap">
+    INSERT INTO management_app.projects (project_key, name, description, created_at, updated_at)
+    VALUES (#{projectKey}, #{name}, #{description}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    RETURNING id, project_key, name, description, created_at, updated_at
   </select>
 
   <select id="update" resultMap="projectResultMap">
-    UPDATE projects
-    SET code = #{request.code},
+    UPDATE management_app.projects
+    SET project_key = #{request.projectKey},
         name = #{request.name},
-        status = #{request.status},
-        owner = #{request.owner},
-        description = #{request.description}
+        description = #{request.description},
+        updated_at = CURRENT_TIMESTAMP
     WHERE id = #{id}
-    RETURNING id, code, name, status, owner, description
+    RETURNING id, project_key, name, description, created_at, updated_at
   </select>
 
-  <delete id="deleteById" parameterType="long">
-    DELETE FROM projects
+  <delete id="delete" parameterType="long">
+    DELETE FROM management_app.projects
     WHERE id = #{id}
   </delete>
+
+  <select id="countAll" resultType="long">
+    SELECT COUNT(*)
+    FROM management_app.projects
+  </select>
+
+  <select id="countIssuesByProjectId" parameterType="long" resultType="long">
+    SELECT COUNT(*)
+    FROM management_app.issues
+    WHERE project_id = #{projectId}
+  </select>
 </mapper>
