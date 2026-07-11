@@ -2,7 +2,7 @@
   <PageSection
     title="プロジェクト一覧"
     kicker="Projects"
-    description="公開リポジトリで管理しやすいサンプルプロジェクトを表示します。"
+    description="サンプルプロジェクトの状態と担当者を確認できます。"
   >
     <div class="table-card">
       <table>
@@ -32,7 +32,7 @@ import PageSection from "../components/PageSection.vue";
 
 const projects = [
   { code: "PJF-101", name: "Alpha Lane", status: "進行中", owner: "Airi Kato" },
-  { code: "PJF-102", name: "Nova Hub", status: "企画中", owner: "Ren Ito" },
+  { code: "PJF-102", name: "Nova Hub", status: "計画中", owner: "Ren Ito" },
   { code: "PJF-103", name: "Sprint Canvas", status: "進行中", owner: "Mio Sato" }
 ];
 </script>

@@ -18,7 +18,7 @@
     <section class="panel">
       <div class="section-line">
         <h3>最近更新された課題</h3>
-        <RouterLink class="button secondary" to="/issues">一覧</RouterLink>
+        <RouterLink class="button secondary" to="/issues">一覧を見る</RouterLink>
       </div>
       <div class="table-card">
         <table>
@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useRouter, RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import PageSection from "../components/PageSection.vue";
 import { dashboardApi } from "../api/dashboardApi";
 import { healthApi } from "../api/healthApi";

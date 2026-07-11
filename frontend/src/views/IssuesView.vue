@@ -27,8 +27,8 @@ import { RouterLink } from "vue-router";
 import PageSection from "../components/PageSection.vue";
 
 const issues = [
-  { id: 1, key: "ISS-101", title: "ログイン画面の導線整理", status: "進行中", project: "Alpha Lane", priority: "High", assignee: "Airi Kato" },
+  { id: 1, key: "ISS-101", title: "ログイン画面の入力検証を追加", status: "対応中", project: "Alpha Lane", priority: "High", assignee: "Airi Kato" },
   { id: 2, key: "ISS-102", title: "課題詳細 API の仕様確認", status: "未着手", project: "Nova Hub", priority: "Medium", assignee: "Ren Ito" },
-  { id: 3, key: "ISS-103", title: "ダッシュボード指標の見直し", status: "レビュー待ち", project: "Sprint Canvas", priority: "Low", assignee: "Mio Sato" }
+  { id: 3, key: "ISS-103", title: "ダッシュボード指標の表示改善", status: "レビュー中", project: "Sprint Canvas", priority: "Low", assignee: "Mio Sato" }
 ];
 </script>

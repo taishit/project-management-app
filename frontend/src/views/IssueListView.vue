@@ -1,5 +1,9 @@
 <template>
-  <PageSection title="課題一覧" kicker="Issues">
+  <PageSection
+    title="課題一覧"
+    kicker="Issues"
+    description="プロジェクトやステータスで絞り込みながら、課題の進捗を確認します。"
+  >
     <p v-if="error" class="alert">{{ error }}</p>
     <div class="toolbar">
       <select v-model="filters.projectId" @change="load">

@@ -5,7 +5,7 @@
         <span class="brand-mark">PF</span>
         <span>
           <strong>ProjectFlow</strong>
-          <small>MVP Workspace</small>
+          <small>Team Workspace</small>
         </span>
       </RouterLink>
 
@@ -14,6 +14,16 @@
         <RouterLink to="/projects">プロジェクト</RouterLink>
         <RouterLink to="/issues">課題</RouterLink>
       </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info-block">
+          <div class="user-avatar">PF</div>
+          <div class="user-meta">
+            <span class="user-name">ProjectFlow</span>
+            <span class="user-role">v0.1.0</span>
+          </div>
+        </div>
+      </div>
     </aside>
 
     <main class="content">

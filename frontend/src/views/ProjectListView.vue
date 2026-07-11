@@ -1,5 +1,9 @@
 <template>
-  <PageSection title="プロジェクト一覧" kicker="Projects">
+  <PageSection
+    title="プロジェクト一覧"
+    kicker="Projects"
+    description="進行中のプロジェクトを確認し、基本情報を管理します。"
+  >
     <p v-if="error" class="alert">{{ error }}</p>
     <div class="toolbar">
       <RouterLink class="button" to="/projects/new">新規作成</RouterLink>
@@ -19,7 +23,7 @@
         <tbody>
           <tr v-for="project in projects" :key="project.id">
             <td>{{ project.id }}</td>
-            <td>{{ project.projectKey }}</td>
+            <td><strong>{{ project.projectKey }}</strong></td>
             <td>{{ project.name }}</td>
             <td>{{ project.description }}</td>
             <td>{{ formatDate(project.updatedAt) }}</td>
