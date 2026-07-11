@@ -2,20 +2,22 @@ package com.projectmanagementapp.domain.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Value
+@Data
+@AllArgsConstructor
 public class Issue {
-    Long id;
-    Long projectId;
-    String projectKey;
-    String projectName;
-    String title;
-    String description;
-    IssueStatus status;
-    IssuePriority priority;
-    String assigneeName;
-    LocalDate dueDate;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private Long id;
+    private Long projectId;
+    private String projectKey;
+    private String projectName;
+    private String title;
+    private String description;
+    private IssueStatus status;
+    private IssuePriority priority;
+    private String assigneeName;
+    private LocalDate dueDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

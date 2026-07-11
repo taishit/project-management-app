@@ -6,6 +6,7 @@ import com.projectmanagementapp.dto.ProjectRequest;
 import com.projectmanagementapp.dto.ProjectResponse;
 import com.projectmanagementapp.exception.BusinessException;
 import com.projectmanagementapp.exception.ResourceNotFoundException;
+import com.projectmanagementapp.message.CommonMessage;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +33,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public ProjectResponse create(ProjectRequest request) {
-        if (projectDao.existsByProjectKey(request.projectKey())) {
-            throw new BusinessException("プロジェクトキーは既に使用されています。");
+        if (projectDao.existsByProjectKey(request.getProjectKey())) {
+            throw new BusinessException(CommonMessage.PROJECT_KEY_ALREADY_USED);
         }
         return toResponse(projectDao.insert(request));
     }
@@ -42,8 +43,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public ProjectResponse update(Long id, ProjectRequest request) {
         findProject(id);
-        if (projectDao.existsByProjectKeyAndIdNot(request.projectKey(), id)) {
-            throw new BusinessException("プロジェクトキーは既に使用されています。");
+        if (projectDao.existsByProjectKeyAndIdNot(request.getProjectKey(), id)) {
+            throw new BusinessException(CommonMessage.PROJECT_KEY_ALREADY_USED);
         }
         return toResponse(projectDao.update(id, request));
     }
@@ -53,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void delete(Long id) {
         findProject(id);
         if (projectDao.countIssuesByProjectId(id) > 0) {
-            throw new BusinessException("課題が存在するプロジェクトは削除できません。");
+            throw new BusinessException(CommonMessage.PROJECT_HAS_ISSUES);
         }
         projectDao.delete(id);
     }
@@ -61,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
     private Project findProject(Long id) {
         Project project = projectDao.findById(id);
         if (project == null) {
-            throw new ResourceNotFoundException("プロジェクトが見つかりません。");
+            throw new ResourceNotFoundException(CommonMessage.PROJECT_NOT_FOUND);
         }
         return project;
     }

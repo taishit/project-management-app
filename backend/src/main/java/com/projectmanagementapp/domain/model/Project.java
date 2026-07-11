@@ -1,14 +1,16 @@
 package com.projectmanagementapp.domain.model;
 
 import java.time.LocalDateTime;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Value
+@Data
+@AllArgsConstructor
 public class Project {
-    Long id;
-    String projectKey;
-    String name;
-    String description;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private Long id;
+    private String projectKey;
+    private String name;
+    private String description;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

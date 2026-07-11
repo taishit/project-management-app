@@ -6,27 +6,33 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record IssueRequest(
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class IssueRequest {
+
     @NotNull
-    Long projectId,
+    private Long projectId;
 
     @NotBlank
     @Size(max = 200)
-    String title,
+    private String title;
 
     @Size(max = 5000)
-    String description,
+    private String description;
 
     @NotNull
-    IssueStatus status,
+    private IssueStatus status;
 
     @NotNull
-    IssuePriority priority,
+    private IssuePriority priority;
 
     @Size(max = 100)
-    String assigneeName,
+    private String assigneeName;
 
-    LocalDate dueDate
-) {
+    private LocalDate dueDate;
 }

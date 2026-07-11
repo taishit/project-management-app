@@ -8,6 +8,7 @@ import com.projectmanagementapp.domain.model.IssueStatus;
 import com.projectmanagementapp.domain.model.Project;
 import com.projectmanagementapp.dto.IssueRequest;
 import com.projectmanagementapp.exception.ResourceNotFoundException;
+import com.projectmanagementapp.message.CommonMessage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,8 +44,8 @@ class IssueServiceImplTest {
         var responses = issueService.findAll(1L, IssueStatus.TODO);
 
         assertThat(responses).hasSize(1);
-        assertThat(responses.getFirst().statusLabel()).isEqualTo("未着手");
-        assertThat(responses.getFirst().priorityLabel()).isEqualTo("中");
+        assertThat(responses.getFirst().getStatusLabel()).isEqualTo("未着手");
+        assertThat(responses.getFirst().getPriorityLabel()).isEqualTo("中");
         verify(issueDao).findByProjectIdAndStatus(1L, IssueStatus.TODO);
     }
 
@@ -54,7 +55,7 @@ class IssueServiceImplTest {
 
         assertThatThrownBy(() -> issueService.findById(99L))
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("課題が見つかりません。");
+            .hasMessage(CommonMessage.ISSUE_NOT_FOUND);
     }
 
     @Test
@@ -64,7 +65,7 @@ class IssueServiceImplTest {
 
         assertThatThrownBy(() -> issueService.create(request))
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("プロジェクトが見つかりません。");
+            .hasMessage(CommonMessage.PROJECT_NOT_FOUND);
     }
 
     @Test
@@ -75,9 +76,9 @@ class IssueServiceImplTest {
 
         var response = issueService.create(request);
 
-        assertThat(response.id()).isEqualTo(10L);
-        assertThat(response.projectKey()).isEqualTo("APP");
-        assertThat(response.status()).isEqualTo("TODO");
+        assertThat(response.getId()).isEqualTo(10L);
+        assertThat(response.getProjectKey()).isEqualTo("APP");
+        assertThat(response.getStatus()).isEqualTo("TODO");
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.projectmanagementapp.domain.model.IssueStatus;
 import com.projectmanagementapp.dto.IssueRequest;
 import com.projectmanagementapp.dto.IssueResponse;
 import com.projectmanagementapp.exception.ResourceNotFoundException;
+import com.projectmanagementapp.message.CommonMessage;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     @Transactional
     public IssueResponse create(IssueRequest request) {
-        ensureProjectExists(request.projectId());
+        ensureProjectExists(request.getProjectId());
         return toResponse(issueDao.insert(request));
     }
 
@@ -53,7 +54,7 @@ public class IssueServiceImpl implements IssueService {
     @Transactional
     public IssueResponse update(Long id, IssueRequest request) {
         findIssue(id);
-        ensureProjectExists(request.projectId());
+        ensureProjectExists(request.getProjectId());
         return toResponse(issueDao.update(id, request));
     }
 
@@ -66,14 +67,14 @@ public class IssueServiceImpl implements IssueService {
 
     private void ensureProjectExists(Long projectId) {
         if (projectDao.findById(projectId) == null) {
-            throw new ResourceNotFoundException("プロジェクトが見つかりません。");
+            throw new ResourceNotFoundException(CommonMessage.PROJECT_NOT_FOUND);
         }
     }
 
     private Issue findIssue(Long id) {
         Issue issue = issueDao.findById(id);
         if (issue == null) {
-            throw new ResourceNotFoundException("課題が見つかりません。");
+            throw new ResourceNotFoundException(CommonMessage.ISSUE_NOT_FOUND);
         }
         return issue;
     }

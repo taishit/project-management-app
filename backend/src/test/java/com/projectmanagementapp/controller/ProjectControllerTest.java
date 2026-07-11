@@ -5,6 +5,7 @@ import com.projectmanagementapp.dto.ProjectResponse;
 import com.projectmanagementapp.exception.BusinessException;
 import com.projectmanagementapp.exception.GlobalExceptionHandler;
 import com.projectmanagementapp.exception.ResourceNotFoundException;
+import com.projectmanagementapp.message.CommonMessage;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,11 +72,11 @@ class ProjectControllerTest {
 
     @Test
     void findByIdReturnsNotFoundWhenProjectDoesNotExist() throws Exception {
-        when(projectService.findById(99L)).thenThrow(new ResourceNotFoundException("プロジェクトが見つかりません。"));
+        when(projectService.findById(99L)).thenThrow(new ResourceNotFoundException(CommonMessage.PROJECT_NOT_FOUND));
 
         mockMvc.perform(get("/api/projects/99"))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.message").value("プロジェクトが見つかりません。"));
+            .andExpect(jsonPath("$.message").value(CommonMessage.PROJECT_NOT_FOUND));
     }
 
     @Test
@@ -114,7 +115,7 @@ class ProjectControllerTest {
 
     @Test
     void updateReturnsBusinessErrorWhenProjectKeyIsDuplicated() throws Exception {
-        when(projectService.update(eq(1L), any())).thenThrow(new BusinessException("プロジェクトキーは既に使用されています。"));
+        when(projectService.update(eq(1L), any())).thenThrow(new BusinessException(CommonMessage.PROJECT_KEY_ALREADY_USED));
 
         mockMvc.perform(put("/api/projects/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +127,7 @@ class ProjectControllerTest {
                     }
                     """))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("プロジェクトキーは既に使用されています。"));
+            .andExpect(jsonPath("$.message").value(CommonMessage.PROJECT_KEY_ALREADY_USED));
     }
 
     @Test
@@ -139,12 +140,12 @@ class ProjectControllerTest {
 
     @Test
     void deleteReturnsBadRequestWhenProjectHasIssues() throws Exception {
-        doThrow(new BusinessException("課題が存在するプロジェクトは削除できません。"))
+        doThrow(new BusinessException(CommonMessage.PROJECT_HAS_ISSUES))
             .when(projectService).delete(1L);
 
         mockMvc.perform(delete("/api/projects/1"))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("課題が存在するプロジェクトは削除できません。"));
+            .andExpect(jsonPath("$.message").value(CommonMessage.PROJECT_HAS_ISSUES));
     }
 
     private ProjectResponse projectResponse() {

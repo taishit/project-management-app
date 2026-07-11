@@ -1,13 +1,19 @@
 package com.projectmanagementapp.dto;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record ProjectResponse(
-    Long id,
-    String projectKey,
-    String name,
-    String description,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
-) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProjectResponse {
+
+    private Long id;
+    private String projectKey;
+    private String name;
+    private String description;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

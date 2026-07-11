@@ -1,16 +1,18 @@
 package com.projectmanagementapp.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Value
+@Data
+@AllArgsConstructor
 public class IssueDetailResponse {
-    Long id;
-    String issueKey;
-    String projectName;
-    String title;
-    String status;
-    String priority;
-    String assignee;
-    String dueDate;
-    String description;
+    private Long id;
+    private String issueKey;
+    private String projectName;
+    private String title;
+    private String status;
+    private String priority;
+    private String assignee;
+    private String dueDate;
+    private String description;
 }

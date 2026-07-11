@@ -5,6 +5,7 @@ import com.projectmanagementapp.domain.service.IssueService;
 import com.projectmanagementapp.dto.IssueResponse;
 import com.projectmanagementapp.exception.GlobalExceptionHandler;
 import com.projectmanagementapp.exception.ResourceNotFoundException;
+import com.projectmanagementapp.message.CommonMessage;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -74,11 +75,11 @@ class IssueControllerTest {
 
     @Test
     void findByIdReturnsNotFoundWhenIssueDoesNotExist() throws Exception {
-        when(issueService.findById(99L)).thenThrow(new ResourceNotFoundException("課題が見つかりません。"));
+        when(issueService.findById(99L)).thenThrow(new ResourceNotFoundException(CommonMessage.ISSUE_NOT_FOUND));
 
         mockMvc.perform(get("/api/issues/99"))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.message").value("課題が見つかりません。"));
+            .andExpect(jsonPath("$.message").value(CommonMessage.ISSUE_NOT_FOUND));
     }
 
     @Test

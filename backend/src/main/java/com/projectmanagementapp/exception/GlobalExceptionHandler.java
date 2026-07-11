@@ -1,6 +1,7 @@
 package com.projectmanagementapp.exception;
 
 import com.projectmanagementapp.dto.ErrorResponse;
+import com.projectmanagementapp.message.CommonMessage;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -31,13 +32,13 @@ public class GlobalExceptionHandler {
         List<String> details = exception.getBindingResult().getFieldErrors().stream()
             .map(this::formatFieldError)
             .toList();
-        return new ErrorResponse("入力内容を確認してください。", details);
+        return new ErrorResponse(CommonMessage.VALIDATION_ERROR, details);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNotReadableException() {
-        return new ErrorResponse("リクエスト本文を確認してください。", List.of());
+        return new ErrorResponse(CommonMessage.REQUEST_BODY_INVALID, List.of());
     }
 
     private String formatFieldError(FieldError error) {

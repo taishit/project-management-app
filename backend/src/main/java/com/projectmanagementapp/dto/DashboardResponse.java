@@ -1,14 +1,20 @@
 package com.projectmanagementapp.dto;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record DashboardResponse(
-    long projectCount,
-    long issueCount,
-    long todoCount,
-    long inProgressCount,
-    long reviewCount,
-    long doneCount,
-    List<IssueResponse> recentIssues
-) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DashboardResponse {
+
+    private long projectCount;
+    private long issueCount;
+    private long todoCount;
+    private long inProgressCount;
+    private long reviewCount;
+    private long doneCount;
+    private List<IssueResponse> recentIssues;
 }

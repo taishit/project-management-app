@@ -1,6 +1,15 @@
 package com.projectmanagementapp.dto;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record ErrorResponse(String message, List<String> details) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ErrorResponse {
+
+    private String message;
+    private List<String> details;
 }

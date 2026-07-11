@@ -5,6 +5,7 @@ import com.projectmanagementapp.domain.model.Project;
 import com.projectmanagementapp.dto.ProjectRequest;
 import com.projectmanagementapp.exception.BusinessException;
 import com.projectmanagementapp.exception.ResourceNotFoundException;
+import com.projectmanagementapp.message.CommonMessage;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,8 +36,8 @@ class ProjectServiceImplTest {
 
         var response = projectService.findById(1L);
 
-        assertThat(response.projectKey()).isEqualTo("APP");
-        assertThat(response.name()).isEqualTo("アプリ開発");
+        assertThat(response.getProjectKey()).isEqualTo("APP");
+        assertThat(response.getName()).isEqualTo("アプリ開発");
     }
 
     @Test
@@ -45,7 +46,7 @@ class ProjectServiceImplTest {
 
         assertThatThrownBy(() -> projectService.findById(99L))
             .isInstanceOf(ResourceNotFoundException.class)
-            .hasMessage("プロジェクトが見つかりません。");
+            .hasMessage(CommonMessage.PROJECT_NOT_FOUND);
     }
 
     @Test
@@ -55,7 +56,7 @@ class ProjectServiceImplTest {
 
         assertThatThrownBy(() -> projectService.create(request))
             .isInstanceOf(BusinessException.class)
-            .hasMessage("プロジェクトキーは既に使用されています。");
+            .hasMessage(CommonMessage.PROJECT_KEY_ALREADY_USED);
 
         verify(projectDao).existsByProjectKey("APP");
         verifyNoMoreInteractions(projectDao);
@@ -69,7 +70,7 @@ class ProjectServiceImplTest {
 
         assertThatThrownBy(() -> projectService.update(1L, request))
             .isInstanceOf(BusinessException.class)
-            .hasMessage("プロジェクトキーは既に使用されています。");
+            .hasMessage(CommonMessage.PROJECT_KEY_ALREADY_USED);
     }
 
     @Test
@@ -79,7 +80,7 @@ class ProjectServiceImplTest {
 
         assertThatThrownBy(() -> projectService.delete(1L))
             .isInstanceOf(BusinessException.class)
-            .hasMessage("課題が存在するプロジェクトは削除できません。");
+            .hasMessage(CommonMessage.PROJECT_HAS_ISSUES);
     }
 
     private ProjectRequest request() {

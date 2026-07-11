@@ -1,8 +1,10 @@
 package com.projectmanagementapp.exception;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Value
+@Data
+@AllArgsConstructor
 public class ErrorResponse {
-    String code;
+    private String code;
 }
