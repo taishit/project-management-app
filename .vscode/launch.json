@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Backend: Spring Boot",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "mainClass": "com.projectmanagementapp.ProjectFlowApplication",
+      "projectName": "project-management-app",
+      "args": "--server.port=8080",
+      "envFile": "${workspaceFolder}/.env",
+      "preLaunchTask": "Frontend: npm run dev"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Frontend: npm run dev",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/frontend",
+      "command": "npm.cmd run dev"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "ProjectFlow: Backend + Frontend",
+      "configurations": [
+        "Backend: Spring Boot"
+      ],
+      "stopAll": true
+    }
+  ]
+}

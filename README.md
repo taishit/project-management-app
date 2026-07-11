@@ -75,6 +75,16 @@ cd backend
 
 デフォルトでは `http://localhost:8080` で起動します。
 
+## VS Code から同時起動する場合
+
+VS Codeでは、リポジトリ内の `ProjectFlow.code-workspace` を開いてください。
+親フォルダを開くと、親フォルダ側の `.vscode/launch.json` が参照される場合があります。
+
+VS Code の「実行とデバッグ」で `Backend: Spring Boot` または `ProjectFlow: Backend + Frontend` を選択して開始すると、Backend と Frontend を同時に起動できます。
+WindowsのPowerShell実行ポリシーに引っかからないよう、VS Codeタスクでは `npm.cmd run dev` を使用します。
+
+この設定は `ProjectFlow.code-workspace`、`.vscode/launch.json`、`.vscode/tasks.json` で管理しています。
+
 ## ローカルDB設定
 
 Spring Boot の DB 接続設定は `backend/src/main/resources/application.yml` に定義しています。
