@@ -1,3 +1,11 @@
+---
+name: 機能追加
+about: ProjectFlowへ新しい機能や仕様変更を追加するためのテンプレート
+title: "[Feature] "
+labels: ["enhancement"]
+assignees: ""
+---
+
 # 概要
 
 追加する機能を一言で記載してください。
